@@ -22,3 +22,64 @@ GitHub:
 https://github.com/keshavkummari/aws_slearn_csa-a_July2019
 
 STEP-1 :
+
+https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html
+
+
+
+root user : 
+
+https://aws.amazon.com 
+
+AWS Management Console access can sign-in at: 
+
+Kkummari Organisation Account :
+
+Management Console :
+
+https://kkummari.signin.aws.amazon.com/console
+
+Account id/name : kkummari
+Username : jessi 
+Password : 
+
+CLI/SDK/Programmatic Access :
+
+Username / Access key ID : 
+Password / Secret access key : 
+
+Region : us-east-1
+
+output type : Text or Json or Table
+
+OS : Windows(CMD/Powershell), MacOS(Terminal), Linux(Terminal) 
+
+Software : awscli 
+
+https://docs.aws.amazon.com/cli/latest/userguide/install-windows.html
+
+# awscli --version or aws --version 
+
+IAM Policies : 
+
+A Policy is a document that formally states one or more permissions.
+
+VPC - Case Study: 
+
+KK IT Services : AWS (aws.amazon.com)(http://kk.signin.aws.amazon.com)
+
+Client-1
+- BMW 
+
+Client-2
+- AUDIO 
+
+Region : Mumbai 
+
+Client-1 (VPC_BMW)
+- BMW 
+
+Client-2 (VPC_AUDI)
+- AUDI
+
+
