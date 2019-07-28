@@ -1,0 +1,24 @@
+
+Our Own AWS Account
+
+Agenda :
+
+1. IAM
+2. VPC
+3. EC2
+
+Documents/Notes : Github
+
+AWS Account :
+https://console.aws.amazon.com/console/home?region=us-east-1
+
+Design Architectures :
+https://cloudcraft.co/app
+
+Network : IPV4
+http://cidr.xyz/
+
+GitHub:
+https://github.com/keshavkummari/aws_slearn_csa-a_July2019
+
+STEP-1 :
