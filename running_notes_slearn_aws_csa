@@ -1,0 +1,412 @@
+
+STEP-1 : Creating a VPC 
+
+$ aws ec2 create-vpc --cidr-block 10.0.0.0/16
+{
+    "Vpc": {
+        "CidrBlock": "10.0.0.0/16",
+        "DhcpOptionsId": "dopt-c13ea7ba",
+        "State": "pending",
+        "VpcId": "vpc-0aeecba7242291815",
+        "OwnerId": "126211257110",
+        "InstanceTenancy": "default",
+        "Ipv6CidrBlockAssociationSet": [],
+        "CidrBlockAssociationSet": [
+            {
+                "AssociationId": "vpc-cidr-assoc-0a41b087bfda71fe1",
+                "CidrBlock": "10.0.0.0/16",
+                "CidrBlockState": {
+                    "State": "associated"
+                }
+            }
+        ],
+        "IsDefault": false,
+        "Tags": []
+    }
+}
+
+STEP-2 : Create a IGW & Attach to VPC
+
+$ aws ec2 create-internet-gateway
+{
+    "InternetGateway": {
+        "Attachments": [],
+        "InternetGatewayId": "igw-0af78e76cb64cab92",
+        "Tags": []
+    }
+}
+
+Attach IGW to a VPC :
+
+$ aws ec2 attach-internet-gateway --vpc-id "vpc-0aeecba7242291815" --internet-gateway-id "igw-0af78e76cb64cab92"
+
+
+STEP-3 : Route Tables 1. Public & 2. Private 
+
+RouteTable-1 : Public 
+
+$ aws ec2 create-route-table --vpc-id "vpc-0aeecba7242291815"
+{
+    "RouteTable": {
+        "Associations": [],
+        "PropagatingVgws": [],
+        "RouteTableId": "rtb-0cb77eb8c3954337e",
+        "Routes": [
+            {
+                "DestinationCidrBlock": "10.0.0.0/16",
+                "GatewayId": "local",
+                "Origin": "CreateRouteTable",
+                "State": "active"
+            }
+        ],
+        "Tags": [],
+        "VpcId": "vpc-0aeecba7242291815",
+        "OwnerId": "126211257110"
+    }
+}
+
+RouteTable-2 : Private
+
+$ aws ec2 create-route-table --vpc-id "vpc-0aeecba7242291815"
+{
+    "RouteTable": {
+        "Associations": [],
+        "PropagatingVgws": [],
+        "RouteTableId": "rtb-017bb470041bd213c",
+        "Routes": [
+            {
+                "DestinationCidrBlock": "10.0.0.0/16",
+                "GatewayId": "local",
+                "Origin": "CreateRouteTable",
+                "State": "active"
+            }
+        ],
+        "Tags": [],
+        "VpcId": "vpc-0aeecba7242291815",
+        "OwnerId": "126211257110"
+    }
+}
+
+STEP-4 : Allow Routing to IGW on RouteTable-1 (PublicRouteTable)
+
+$ aws ec2 create-route --route-table-id "rtb-0cb77eb8c3954337e" --destination-cidr-block 0.0.0.0/0 --gateway-id "igw-0af78e76cb64cab92"
+{
+    "Return": true
+}
+
+STEP-5 : Create 6 subnets part of 2 AZ's i.e. us-east-1a & us-east-1b :
+
+aws ec2 create-subnet --vpc-id "vpc-0aeecba7242291815" --cidr-block 10.0.1.0/24 --availability-zone "us-east-1a"
+
+{
+    "Subnet": {
+        "AvailabilityZone": "us-east-1a",
+        "AvailabilityZoneId": "use1-az2",
+        "AvailableIpAddressCount": 251,
+        "CidrBlock": "10.0.1.0/24",
+        "DefaultForAz": false,
+        "MapPublicIpOnLaunch": false,
+        "State": "pending",
+        "SubnetId": "subnet-0aa17972295755117",
+        "VpcId": "vpc-0aeecba7242291815",
+        "OwnerId": "126211257110",
+        "AssignIpv6AddressOnCreation": false,
+        "Ipv6CidrBlockAssociationSet": [],
+        "SubnetArn": "arn:aws:ec2:us-east-1:126211257110:subnet/subnet-0aa17972295755117"
+    }
+}
+
+aws ec2 create-subnet --vpc-id "vpc-0aeecba7242291815" --cidr-block 10.0.2.0/24 --availability-zone "us-east-1b"
+
+{
+    "Subnet": {
+        "AvailabilityZone": "us-east-1b",
+        "AvailabilityZoneId": "use1-az4",
+        "AvailableIpAddressCount": 251,
+        "CidrBlock": "10.0.2.0/24",
+        "DefaultForAz": false,
+        "MapPublicIpOnLaunch": false,
+        "State": "pending",
+        "SubnetId": "subnet-0bc56af61d9280574",
+        "VpcId": "vpc-0aeecba7242291815",
+        "OwnerId": "126211257110",
+        "AssignIpv6AddressOnCreation": false,
+        "Ipv6CidrBlockAssociationSet": [],
+        "SubnetArn": "arn:aws:ec2:us-east-1:126211257110:subnet/subnet-0bc56af61d9280574"
+    }
+}
+
+
+aws ec2 create-subnet --vpc-id "vpc-0aeecba7242291815" --cidr-block 10.0.3.0/24 --availability-zone "us-east-1a"
+
+{
+    "Subnet": {
+        "AvailabilityZone": "us-east-1a",
+        "AvailabilityZoneId": "use1-az2",
+        "AvailableIpAddressCount": 251,
+        "CidrBlock": "10.0.3.0/24",
+        "DefaultForAz": false,
+        "MapPublicIpOnLaunch": false,
+        "State": "pending",
+        "SubnetId": "subnet-036464ccbca861966",
+        "VpcId": "vpc-0aeecba7242291815",
+        "OwnerId": "126211257110",
+        "AssignIpv6AddressOnCreation": false,
+        "Ipv6CidrBlockAssociationSet": [],
+        "SubnetArn": "arn:aws:ec2:us-east-1:126211257110:subnet/subnet-036464ccbca861966"
+    }
+}
+
+
+aws ec2 create-subnet --vpc-id "vpc-0aeecba7242291815" --cidr-block 10.0.4.0/24 --availability-zone "us-east-1b"
+
+{
+    "Subnet": {
+        "AvailabilityZone": "us-east-1b",
+        "AvailabilityZoneId": "use1-az4",
+        "AvailableIpAddressCount": 251,
+        "CidrBlock": "10.0.4.0/24",
+        "DefaultForAz": false,
+        "MapPublicIpOnLaunch": false,
+        "State": "pending",
+        "SubnetId": "subnet-00586faa82d4aa77e",
+        "VpcId": "vpc-0aeecba7242291815",
+        "OwnerId": "126211257110",
+        "AssignIpv6AddressOnCreation": false,
+        "Ipv6CidrBlockAssociationSet": [],
+        "SubnetArn": "arn:aws:ec2:us-east-1:126211257110:subnet/subnet-00586faa82d4aa77e"
+    }
+}
+
+aws ec2 create-subnet --vpc-id "vpc-0aeecba7242291815" --cidr-block 10.0.5.0/24 --availability-zone "us-east-1a"
+
+{
+    "Subnet": {
+        "AvailabilityZone": "us-east-1a",
+        "AvailabilityZoneId": "use1-az2",
+        "AvailableIpAddressCount": 251,
+        "CidrBlock": "10.0.5.0/24",
+        "DefaultForAz": false,
+        "MapPublicIpOnLaunch": false,
+        "State": "pending",
+        "SubnetId": "subnet-0bb549558f50b3b36",
+        "VpcId": "vpc-0aeecba7242291815",
+        "OwnerId": "126211257110",
+        "AssignIpv6AddressOnCreation": false,
+        "Ipv6CidrBlockAssociationSet": [],
+        "SubnetArn": "arn:aws:ec2:us-east-1:126211257110:subnet/subnet-0bb549558f50b3b36"
+    }
+}
+
+
+aws ec2 create-subnet --vpc-id "vpc-0aeecba7242291815" --cidr-block 10.0.6.0/24 --availability-zone "us-east-1b"
+
+{
+    "Subnet": {
+        "AvailabilityZone": "us-east-1b",
+        "AvailabilityZoneId": "use1-az4",
+        "AvailableIpAddressCount": 251,
+        "CidrBlock": "10.0.6.0/24",
+        "DefaultForAz": false,
+        "MapPublicIpOnLaunch": false,
+        "State": "pending",
+        "SubnetId": "subnet-037378e57de246ce6",
+        "VpcId": "vpc-0aeecba7242291815",
+        "OwnerId": "126211257110",
+        "AssignIpv6AddressOnCreation": false,
+        "Ipv6CidrBlockAssociationSet": [],
+        "SubnetArn": "arn:aws:ec2:us-east-1:126211257110:subnet/subnet-037378e57de246ce6"
+    }
+}
+
+
+STEP-6 : Enable Auto-Assign-Public-IP to Subnet :
+
+Enable Auto-Assign-Public-IP to Subnets :
+
+Subnet-1 :
+aws ec2 modify-subnet-attribute --subnet-id "subnet-0aa17972295755117" --map-public-ip-on-launch
+
+Subnet-2 :
+aws ec2 modify-subnet-attribute --subnet-id "subnet-0bc56af61d9280574" --map-public-ip-on-launch
+
+STEP-7 : Add Sub-1 and Sub-2 part of Public RouteTable:
+
+aws ec2 associate-route-table  --subnet-id "subnet-0aa17972295755117" --route-table-id "rtb-0cb77eb8c3954337e"
+
+{
+    "AssociationId": "rtbassoc-037f95609a85e13f1"
+}
+
+aws ec2 associate-route-table  --subnet-id "subnet-0bc56af61d9280574" --route-table-id "rtb-0cb77eb8c3954337e"
+
+{
+    "AssociationId": "rtbassoc-001c89bf64d8b7940"
+}
+
+
+aws ec2 associate-route-table  --subnet-id "subnet-036464ccbca861966" --route-table-id "rtb-017bb470041bd213c"
+aws ec2 associate-route-table  --subnet-id "subnet-00586faa82d4aa77e" --route-table-id "rtb-017bb470041bd213c"
+aws ec2 associate-route-table  --subnet-id "subnet-0bb549558f50b3b36" --route-table-id "rtb-017bb470041bd213c"
+aws ec2 associate-route-table  --subnet-id "subnet-037378e57de246ce6" --route-table-id "rtb-017bb470041bd213c"
+
+$ aws ec2 associate-route-table  --subnet-id "subnet-036464ccbca861966" --route-table-id "rtb-017bb470041bd213c"
+{
+    "AssociationId": "rtbassoc-088c41583a2805dd9"
+}
+
+Administrator@EC2AMAZ-Q0SEMOQ MINGW64 ~
+$ aws ec2 associate-route-table  --subnet-id "subnet-00586faa82d4aa77e" --route-table-id "rtb-017bb470041bd213c"
+{
+    "AssociationId": "rtbassoc-03f09fba066e2d8c1"
+}
+
+Administrator@EC2AMAZ-Q0SEMOQ MINGW64 ~
+$ aws ec2 associate-route-table  --subnet-id "subnet-0bb549558f50b3b36" --route-table-id "rtb-017bb470041bd213c"
+{
+    "AssociationId": "rtbassoc-059ca3c54e791c182"
+}
+
+Administrator@EC2AMAZ-Q0SEMOQ MINGW64 ~
+$ aws ec2 associate-route-table  --subnet-id "subnet-037378e57de246ce6" --route-table-id "rtb-017bb470041bd213c"
+{
+    "AssociationId": "rtbassoc-02e4d51d9b5f887d7"
+}
+
+
+
+# aws ec2 describe-subnets --filters "Name=vpc-id,Values=vpc-0aeecba7242291815" --query 'Subnets[*].{ID:SubnetId,CIDR:CidrBlock}'
+
+[
+    {
+        "ID": "subnet-00586faa82d4aa77e",
+        "CIDR": "10.0.4.0/24"
+    },
+    {
+        "ID": "subnet-037378e57de246ce6",
+        "CIDR": "10.0.6.0/24"
+    },
+    {
+        "ID": "subnet-0aa17972295755117",
+        "CIDR": "10.0.1.0/24"
+    },
+    {
+        "ID": "subnet-036464ccbca861966",
+        "CIDR": "10.0.3.0/24"
+    },
+    {
+        "ID": "subnet-0bb549558f50b3b36",
+        "CIDR": "10.0.5.0/24"
+    },
+    {
+        "ID": "subnet-0bc56af61d9280574",
+        "CIDR": "10.0.2.0/24"
+    }
+]
+
+
+STEP-8 : Launch NAT Gateway :
+
+aws ec2 create-nat-gateway --subnet-id "subnet-0bc56af61d9280574" --allocation-id "eipalloc-04595f14e1b349cc3"
+
+{
+    "NatGateway": {
+        "CreateTime": "2019-08-03T16:27:44.000Z",
+        "NatGatewayAddresses": [
+            {
+                "AllocationId": "eipalloc-04595f14e1b349cc3"
+            }
+        ],
+        "NatGatewayId": "nat-0b7590ee2e4f48833",
+        "State": "pending",
+        "SubnetId": "subnet-0bc56af61d9280574",
+        "VpcId": "vpc-0aeecba7242291815"
+    }
+}
+
+STEP-9 : Allow NAT Gatway on Private RouteTable :
+
+0.0.0.0/0 >>> NAT Gatway 
+
+aws ec2 create-route --route-table-id "rtb-017bb470041bd213c" --destination-cidr-block 0.0.0.0/0 --nat-gateway-id "nat-0b7590ee2e4f48833"   
+
+{
+    "Return": true
+}
+
+STEP-10 : NACL & Security Group :
+
+aws ec2 create-network-acl --vpc-id "vpc-0aeecba7242291815"
+
+{
+    "NetworkAcl": {
+        "Associations": [],
+        "Entries": [
+            {
+                "CidrBlock": "0.0.0.0/0",
+                "Egress": true,
+                "IcmpTypeCode": {},
+                "PortRange": {},
+                "Protocol": "-1",
+                "RuleAction": "deny",
+                "RuleNumber": 32767
+            },
+            {
+                "CidrBlock": "0.0.0.0/0",
+                "Egress": false,
+                "IcmpTypeCode": {},
+                "PortRange": {},
+                "Protocol": "-1",
+                "RuleAction": "deny",
+                "RuleNumber": 32767
+            }
+        ],
+        "IsDefault": false,
+        "NetworkAclId": "acl-0e0a653cb90590f41",
+        "Tags": [],
+        "VpcId": "vpc-0aeecba7242291815",
+        "OwnerId": "126211257110"
+    }
+}
+
+
+Inbound Traffic:
+# aws ec2 create-network-acl-entry --network-acl-id "acl-0e0a653cb90590f41" --ingress --rule-number 110 --protocol tcp --port-range From=22,To=22 --cidr-block 0.0.0.0/0 --rule-action allow
+# aws ec2 create-network-acl-entry --network-acl-id "acl-0e0a653cb90590f41" --ingress --rule-number 100 --protocol tcp --port-range From=80,To=80 --cidr-block 0.0.0.0/0 --rule-action allow
+# aws ec2 create-network-acl-entry --network-acl-id "acl-0e0a653cb90590f41" --ingress --rule-number 120 --protocol udp --port-range From=53,To=53 --cidr-block 0.0.0.0/0 --rule-action allow
+
+Outbound Traffic:
+# aws ec2 create-network-acl-entry --network-acl-id "acl-0e0a653cb90590f41" --egress --rule-number 110 --protocol tcp --port-range From=22,To=22 --cidr-block 0.0.0.0/0 --rule-action allow
+# aws ec2 create-network-acl-entry --network-acl-id "acl-0e0a653cb90590f41" --egress --rule-number 100 --protocol tcp --port-range From=80,To=80 --cidr-block 0.0.0.0/0 --rule-action allow
+# aws ec2 create-network-acl-entry --network-acl-id "acl-0e0a653cb90590f41" --egress --rule-number 120 --protocol udp --port-range From=53,To=53 --cidr-block 0.0.0.0/0 --rule-action allow
+
+
+STEP-11 : Create Security Group and allow port 22 part inbound :
+
+aws ec2 create-security-group --group-name "sg_ec2_custom_vpc" --description "Port-22" --vpc-id "vpc-0aeecba7242291815"
+
+{
+    "GroupId": "sg-0a22f4258aa6f693b"
+}
+
+aws ec2 authorize-security-group-ingress --group-id "sg-0a22f4258aa6f693b" --protocol tcp --port 22 --cidr 0.0.0.0/0
+
+STEP- : Launch a EC2 instance of Windows/Linux @ PublicSubnet-1 :
+
+aws ec2 run-instances --image-id "ami-0b898040803850657" --count 1 --instance-type t2.micro --key-name nv_aws --security-group-ids "sg-0a22f4258aa6f693b" --subnet-id "subnet-0aa17972295755117" --tag-specifications 'ResourceType=instance,Tags=[{Key=ToDoAdministration,Value=BastionServer}]'
+
+
+
+
+# cat myuserdata.txt
+
+Bootstrap Script Execute :
+
+EC2 - Linux 
+
+#!/bin/bash
+yum update -y
+yum install http* --skip-broken -y
+service httpd start
+chkconfig httpd on
+echo "Welcome to AWS World" > /var/www/html/index.html
