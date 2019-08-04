@@ -1,0 +1,51 @@
+#--------------------------------------------------------------------#
+Agenda : 
+#--------------------------------------------------------------------#
+1. BootStrap & Route53
+
+2. Walkthrough EC2 Dashboard (EFS)
+
+3. S3 
+
+4. Elastic Load Balancer
+
+5. Launch Configuration
+
+6. Auto Scaling 
+
+7. Troubleshooting VPC Issues 
+
+8. VPC Peering
+
+#--------------------------------------------------------------------#
+
+#--------------------------------------------------------------------#
+1. BootStrap :
+
+EC2 - Linux(Shell Script) | Windows(PowerShell)
+
+#!/bin/bash
+yum install wget* curl* vim* unzip* -y
+yum update -y
+yum install http* --skip-broken -y
+wget https://www.free-css.com/assets/files/free-css-templates/download/page231/bizexpress-v1.0.1.zip
+unzip *.zip
+cd Biz*
+mv * /var/www/html/
+service httpd start
+chkconfig httpd on
+
+
+Purchase a Domain Name : AWS, Godady, Google, etc... 
+
+ns-575.awsdns-07.net
+ns-1654.awsdns-14.co.uk
+ns-416.awsdns-52.com
+ns-1218.awsdns-24.org
+
+
+UserA --> Chrome ---> keshavkummari.com ---> Godaddy.com ---> NS(4 AWS) --->> EC2(Ipaddress) ---> 
+
+
+amazon_linux_kk_v1.0
+ami-0d4a7c0a1113ee069
