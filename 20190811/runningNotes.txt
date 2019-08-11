@@ -1,0 +1,79 @@
+
+Agenda :
+
+1. VPC Peering
+
+2. Route53
+
+3. CloudFormation 
+
+4. CloudFront 
+
+5. Project Walkthrough
+
+
+VPC Peering :
+
+STEP-1 : 
+
+VPC : BMW (EC2 instance - Public or Private)
+
+    1. VPC :
+        1. IGW
+        2. RTB - Public & Private
+        3. Subnets - 2 Public and 4 Private 
+        4. NAT Gateway - Public Subnet-2 
+        5. NACL - 22 and 80
+        6. SG   - 22 and 80 
+
+VPC : AUDI (EC2 instance - Public or Private)
+
+    1. VPC :
+        1. IGW
+        2. RTB - Public & Private
+        3. Subnets - 2 Public and 4 Private 
+        4. NAT Gateway - Public Subnet-2 
+        5. NACL - 22 and 80
+        6. SG   - 22 and 80 
+
+A VPC peering connection (pcx-0ae618766b0bb3183) has been requested.
+Requester VPC owner
+126211257110 (This account)
+Accepter VPC owner
+126211257110 (This account)
+Requester VPC ID
+vpc-08e67c7fbbfe396ae
+Accepter VPC ID
+vpc-0f5bfdfdccdadcc26
+Requester VPC Region
+us-east-1
+Accepter VPC Region
+us-east-1
+Requester VPC CIDRs
+10.0.0.0/16
+Accepter VPC CIDRs
+-
+
+EC2 - instance :
+
+<html>
+<head><title>S1</title></head>
+<body bgcolor="olive">
+
+<h1> Welcome to SERVER-1 </h1>
+
+</body>
+</html>
+
+EC2 - instance :
+
+<html>
+<head><title>S2</title></head>
+<body bgcolor="#2ECCFA">
+
+<h1> Welcome to SERVER-2 </h1>
+
+</body>
+</html>
+
+
