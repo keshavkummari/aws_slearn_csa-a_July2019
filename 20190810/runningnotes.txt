@@ -1,0 +1,39 @@
+
+
+Agenda :
+
+1. ELB
+2. Launch Configuration
+3. AutoScaling
+4. Database
+5. EFS 
+6. Route53 
+
+Launch configuration :
+
+AMI : Amazon Linux 
+Instance Type : t2.micro 
+RAM : 
+CPU : 
+ 
+
+#!/bin/bash
+cd /opt/
+yum install wget* curl* vim* unzip* -y
+yum update -y
+wget https://www.free-css.com/assets/files/free-css-templates/download/page231/bizexpress-v1.0.1.zip
+unzip *.zip
+cd Biz*
+yum install http* --skip-broken -y
+mv * /var/www/html/
+service httpd start
+
+
+
+Route53 :
+
+A Record 
+
+DomainName : codewithckk.com 
+
+codewithckk.com  ipaddress(EC2) 3.89.246.229
