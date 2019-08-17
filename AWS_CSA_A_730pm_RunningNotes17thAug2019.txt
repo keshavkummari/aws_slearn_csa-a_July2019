@@ -1,0 +1,261 @@
+
+Agenda : 
+#--------------------------------------------------------------#
+Lession-7 :
+
+1. CloudFront 
+
+2. S3 CLI Commands 
+#--------------------------------------------------------------#
+Lession-9 : Database 
+
+1. DMS 
+#--------------------------------------------------------------#
+Lession-10 : Application Services 
+
+1. Application Services 
+2. Elastic Transcoder
+3. Workspaces
+4. Application Services Best Practices and Costs
+5. Demo - Amazon SNS 
+#--------------------------------------------------------------#
+Lession-11 : 
+
+1. AWS CloudTrail 
+2. AWS CloudWatch 
+3. Truster Advisor
+#--------------------------------------------------------------#
+Lession-14 : 
+
+1. Overview of Exam 
+2. Study Tips
+#--------------------------------------------------------------#
+Project-1 : Walkthrough of Project 
+
+STEP-1 : Create an S3 Bucket i.e. "awsdevopsagile"
+
+STEP-2 : Enable Static WebSite Hosting 
+
+STEP-3 : Enable Server Access Logging
+
+STEP-4 : Upload Website Code :
+
+1. index.html 
+
+<html>
+<head>
+  <title>Keshav Kummari</title>
+</head>
+
+<body bgcolor="olive">
+
+  <h1> Welcome to AWS World by Keshav Kummari </h1>
+
+</body>
+</html>
+
+
+
+2. error.html 
+
+<html>
+<body>
+    <h1>404!</h1>
+</body>
+</html>
+
+STEP-5 : Create a Custom Certificate Using Amazon Certificate Manager(ACM)
+
+Note: This is for https access 
+
+STEP-6 : Create a CloudFront Web Distribution and Map with Domain name and Add ACM:
+
+1. Create CloudFront 
+2. Map Custom Domain
+3. Add Amazon Certificate Manager to CloudFront 
+
+STEP-7 : Route 53
+
+1. Go to Route53 and Create Hosted Zone on Custom Domain
+2. Create A Record and Map with Domain and enable Geolocation Routing Policy
+and restrict France and Australia.
+3. Validate all the above mentioned steps 
+
+https://docs.aws.amazon.com/AmazonS3/latest/user-guide/server-access-logging.html
+https://docs.aws.amazon.com/AmazonS3/latest/dev/ServerLogs.html
+
+#----------------------S3 Bucket Policy---------------------------------#
+{
+    "Version": "2012-10-17",
+    "Id": "PolicyId2",
+    "Statement": [
+        {
+            "Sid": "AllowIPmix",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:*",
+            "Resource": "arn:aws:s3:::simplilearntask1/*",
+            "Condition": {
+                "IpAddress": {
+                    "aws:SourceIp": "0.0.0.0/0"
+                }
+            }
+        }
+    ]
+}
+#--------------------------------------------------------------#
+
+
+
+
+DB Install :
+
+Step 1 – Add MariaDB Yum Repository
+
+For CentOS/RHEL – 7
+
+vi /etc/yum.repos.d/mariadb.repo
+
+[mariadb]
+name = MariaDB
+baseurl = http://yum.mariadb.org/10.4/rhel7-amd64
+gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+gpgcheck=1
+
+Step 2 – Install MariaDB Server
+
+sudo yum install MariaDB-server MariaDB-client
+
+sudo systemctl start mysqld.service
+sudo systemctl start mysql.service
+
+
+Step 3 – Secure MariaDB Install
+
+
+sudo /usr/bin/mysql_secure_installation
+
+NOTE: RUNNING ALL PARTS OF THIS SCRIPT IS RECOMMENDED FOR ALL MariaDB
+      SERVERS IN PRODUCTION USE!  PLEASE READ EACH STEP CAREFULLY!
+
+Enter current password for root (enter for none):
+OK, successfully used password, moving on...
+
+Set root password? [Y/n] y
+New password:
+Re-enter new password:
+Password updated successfully!
+Reloading privilege tables..
+ ... Success!
+
+Remove anonymous users? [Y/n] y
+ ... Success!
+
+Disallow root login remotely? [Y/n] y
+ ... Success!
+
+Remove test database and access to it? [Y/n] y
+ - Dropping test database...
+ ... Success!
+ - Removing privileges on test database...
+ ... Success!
+
+Reload privilege tables now? [Y/n] y
+ ... Success!
+
+Cleaning up...
+Thanks for using MariaDB!
+
+
+Step 4 – Working with MariaDB
+After installing and completing the configuration, connect to a MariaDB server using the following command.
+
+sudo mysql -u root -p
+
+
+## CREATE DATABASE
+MariaDB [(none)]> CREATE DATABASE course;
+
+## CREATE USER ACCOUNT
+MariaDB [(none)]> CREATE USER 'root'@'localhost' IDENTIFIED BY 'secret';
+ 
+## GRANT PERMISSIONS ON DATABASE
+MariaDB [(none)]> GRANT ALL ON course.* TO 'root'@'localhost';
+ 
+##  RELOAD PRIVILEGES
+MariaDB [(none)]> FLUSH PRIVILEGES;
+
+
+
+1. Create a MySQL or MariaDB sample database on your standalone host 
+2. Make sure that you can access it from other/remote hosts 
+3. Default user could be used as root and port could be used as 3306 for both the databases. 
+4. use following commands for the grants of access for any user from which you are connecting from outside world:
+you can also check the users which are permitted for the connection from outside world: 
+
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'your_password' WITH GRANT OPTION; -- or any other user with whom you want to do the migration
+
+5. Once your source database is ready - go to AWS console and open Data Migration Services.
+
+
+
+Database : rawdatabase
+
+STEP-1 :
+/* Create a schema */
+CREATE DATABASE course;
+
+CREATE: CREATE command IS used TO CREATE DATABASE AND its Objects LIKE
+
+1. TABLES,
+2. INDEX,
+3. STORED PROCEDURE,
+4. views ,
+5. TRIGGERS,
+6. functions AND etc.
+
+STEP-2:
+/* Create a table under course schema */
+CREATE TABLE `course`.python(Id INT,FNAME VARCHAR(50),LNAME VARCHAR(50),Course VARCHAR(50) ,DOJ DATE,Fee INT);
+
+STEP-3:
+/* Insert the data with the help of insert query */
+INSERT INTO `course`.python(id,FNAME,LNAME,Course,DOJ,Fee) VALUES (1,'Joel','Kummari','Python','2017-01-20',1000);
+INSERT INTO `course`.python(id,FNAME,LNAME,Course,DOJ,Fee) VALUES (1,'Keshav','Kummari','Python','2019-01-20',5000);
+
+
+STEP-4:
+/* Loaded the data with the help of LOAD QUERY from Windows */
+LOAD DATA LOCAL INFILE 'C:\\Users\\Jessicah Princess\\Desktop\\course_data.txt' INTO TABLE course.python
+(Id,FNAME,LNAME,Course,DOJ,Fee)
+
+STEP-5:
+/* Loaded the data with the help of LOAD QUERY  from Linux/Unix Server */
+LOAD DATA LOCAL INFILE '/root/intel.txt' INTO TABLE course.python
+(Id,FNAME,LNAME,Course,DOJ,Fee)
+
+STEP-6:
+/* Query the table or retrive the table */
+SELECT * FROM course.python;
+
+STEP-7:
+/* Update the values as per the requirement */
+UPDATE course.python SET doj='2017-03-24' WHERE doj='0000-00-00'
+
+STEP-8:
+/* Query the table or retrive the table */
+SELECT * FROM course.python;
+
+STEP-9:
+/* Query a specific student details */
+SELECT * FROM course.python WHERE fname='jessi'
+# or
+SELECT * FROM course.python WHERE fname LIKE 'jessi'
+
+STEP-10:
+/* Update the user course column as per the requirement */
+UPDATE course.python SET course='Django' WHERE course='SQL'
+
+STEP-11:
+/* Cross check the course details of the student */
+SELECT * FROM course.python WHERE fname LIKE 'jessi'
